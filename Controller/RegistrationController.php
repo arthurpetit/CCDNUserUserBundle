@@ -13,6 +13,8 @@
 
 namespace CCDNUser\UserBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
+
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
