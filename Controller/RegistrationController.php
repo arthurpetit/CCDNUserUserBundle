@@ -68,7 +68,7 @@ class RegistrationController extends BaseController
 	 * @access public
 	 * @return RedirectResponse|RenderResponse
 	 */
-    public function registerAction()
+    public function registerAction(Request $request)
     {
 		$session = $this->container->get('session');
 
@@ -83,7 +83,7 @@ class RegistrationController extends BaseController
 		{
 			if ($session->get('accepted_terms')) 
 			{
-        		return parent::registerAction();
+        		return parent::registerAction($request);
 			} else {
             	return new RedirectResponse($this->container->get('router')->generate('ccdn_user_user_registration_terms'));
 			}
