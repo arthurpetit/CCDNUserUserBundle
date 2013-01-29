@@ -13,9 +13,10 @@
 
 namespace CCDNUser\UserBundle\Form\Type;
 
+use FOS\UserBundle\Form\Type\RegistrationFormType as BaseFormType;
+
 use Symfony\Component\Form\FormBuilderInterface;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
@@ -26,23 +27,8 @@ use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
  * @author Reece Fowell <reece@codeconsortium.com>
  * @version 1.0
  */
-class RegistrationFormType extends AbstractType
+class RegistrationFormType extends BaseFormType
 {
-
-    /**
-     *
-     * @access private
-     */
-    private $class;
-
-    /**
-	 *
-     * @param string $class The User class name
-     */
-    public function __construct($class)
-    {
-        $this->class = $class;
-    }
 
     /**
      *
@@ -51,10 +37,11 @@ class RegistrationFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+    	parent::buildForm($builder, $options);
         $builder
-            ->add('username')
-            ->add('email', 'email')
-            ->add('plainPassword', 'repeated', array('type' => 'password'))
+            //->add('username')
+            //->add('email', 'email')
+            //->add('plainPassword', 'repeated', array('type' => 'password'))
             ->add('recaptcha', 'ewz_recaptcha', array(
                 'property_path' => false,
                 'attr' => array(
@@ -65,26 +52,6 @@ class RegistrationFormType extends AbstractType
 		        //    new True()
 		        //)
             ));
-    }
-
-    /**
-     *
-     * @access public
-     * @param array $options
-     */
-    public function getDefaultOptions(array $options)
-    {
-        return array('data_class' => $this->class);
-    }
-
-    /**
-     *
-     * @access public
-     * @return string
-     */
-    public function getName()
-    {
-        return 'fos_user_registration';
     }
 
 }
