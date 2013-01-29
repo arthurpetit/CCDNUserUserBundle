@@ -15,13 +15,12 @@ namespace CCDNUser\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use FOS\UserBundle\Entity\User as BaseUser;
+use Sonata\UserBundle\Entity\BaseUser;
 use CCDNUser\ProfileBundle\Entity\Profile;
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints as Recaptcha;
 
 /**
- * @ORM\Entity(repositoryClass="CCDNUser\UserBundle\Repository\UserRepository")
- * @ORM\Table(name="fos_user")
+ * @ORM\MappedSuperclass
  */
 class User extends BaseUser
 {
@@ -114,78 +113,6 @@ class User extends BaseUser
         return $this->registeredDate;
     }
 
-    /*
-     *
-     *
-     *
-     * FACEBOOK STUFF
-     *
-     *
-     */
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
-     */
-    protected $firstname;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
-     */
-    protected $lastname;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="facebookId", type="string", length=255, nullable=true)
-     */
-    protected $facebookId;
-
-    public function serialize()
-    {
-        return serialize(array($this->facebookId, parent::serialize()));
-    }
-
-    public function unserialize($data)
-    {
-        list($this->facebookId, $parentData) = unserialize($data);
-        parent::unserialize($parentData);
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * @param string $firstname
-     */
-    public function setFirstname($firstname)
-    {
-        $this->firstname = $firstname;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastname()
-    {
-        return $this->lastname;
-    }
-
-    /**
-     * @param string $lastname
-     */
-    public function setLastname($lastname)
-    {
-        $this->lastname = $lastname;
-    }
 
     /**
      * Get the full name of the user (first + last name)
@@ -202,7 +129,8 @@ class User extends BaseUser
      */
     public function setFacebookId($facebookId)
     {
-        $this->facebookId = $facebookId;
+    	
+        $this->facebookUid = $facebookId;
         $this->salt = '';
     }
 
@@ -211,7 +139,7 @@ class User extends BaseUser
      */
     public function getFacebookId()
     {
-        return $this->facebookId;
+        return $this->facebookUid;
     }
 
     /**
