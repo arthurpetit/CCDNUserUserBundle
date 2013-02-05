@@ -20,7 +20,7 @@ use CCDNUser\ProfileBundle\Entity\Profile;
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints as Recaptcha;
 
 /**
- * @ORM\MappedSuperclass
+ * @ORM\MappedSuperclass(repositoryClass="CCDNUser\UserBundle\Repository\UserRepository")
  */
 class User extends BaseUser
 {
@@ -28,7 +28,7 @@ class User extends BaseUser
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
-     * @ORM\generatedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -38,8 +38,8 @@ class User extends BaseUser
     protected $registeredDate;
 
     /**
-     * @ORM\OneToOne(targetEntity="CCDNUser\ProfileBundle\Entity\Profile", cascade={"persist", "remove"}, orphanRemoval=true)
-	 * @ORM\JoinColumn(name="fk_profile_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\OneToOne(targetEntity="CCDNUser\ProfileBundle\Entity\Profile", cascade={"all"}, mappedBy="user")
+	 * @ORM\JoinColumn(name="fk_profile_id", referencedColumnName="id")
      */
     protected $profile;
 

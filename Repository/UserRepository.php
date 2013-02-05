@@ -27,20 +27,26 @@ use Pagerfanta\Pagerfanta;
 class UserRepository extends EntityRepository
 {
 
+	public function getUserEntity()
+	{
+    	return'AlumneyeUserBundle:User';
+    	//return 'CCDNUserUserBundle:User';
+	}
+	
     /**
      *
      * @access public
      */
     public function findAllPaginated()
     {
-
+    	
         $query = $this->getEntityManager()
-            ->createQuery('
-                SELECT u, p FROM CCDNUserUserBundle:User u
+            ->createQuery("
+                SELECT u, p FROM {$this->getUserEntity()} u
                 LEFT JOIN u.profile p
                 WHERE u.locked = 0 AND u.enabled = 1
                 GROUP BY u.id
-                ORDER BY u.username ASC');
+                ORDER BY u.username ASC");
 
         try {
             return new Pagerfanta(new DoctrineORMAdapter($query));
@@ -58,12 +64,12 @@ class UserRepository extends EntityRepository
     {
 
         $query = $this->getEntityManager()
-            ->createQuery('
-                SELECT u, p FROM CCDNUserUserBundle:User u
+            ->createQuery("
+                SELECT u, p FROM {$this->getUserEntity()} u
                 INNER JOIN u.profile p
                 WHERE u.username LIKE :filter AND u.enabled = 1
                 GROUP BY u.id
-                ORDER BY u.username ASC')
+                ORDER BY u.username ASC")
             ->setParameter('filter', $filter . '%');
 
         try {
@@ -81,12 +87,12 @@ class UserRepository extends EntityRepository
     {
 
         $query = $this->getEntityManager()
-            ->createQuery('
-                SELECT u, p FROM CCDNUserUserBundle:User u
+            ->createQuery("
+                SELECT u, p FROM {$this->getUserEntity()} u
                 LEFT JOIN u.profile p
                 WHERE u.enabled = 0
                 GROUP BY u.id
-                ORDER BY u.username ASC');
+                ORDER BY u.username ASC");
 
         try {
             return new Pagerfanta(new DoctrineORMAdapter($query));
@@ -103,12 +109,12 @@ class UserRepository extends EntityRepository
     {
 
         $query = $this->getEntityManager()
-            ->createQuery('
-                SELECT u, p FROM CCDNUserUserBundle:User u
+            ->createQuery("
+                SELECT u, p FROM {$this->getUserEntity()} u
                 LEFT JOIN u.profile p
                 WHERE u.locked = 1
                 GROUP BY u.id
-                ORDER BY u.username ASC');
+                ORDER BY u.username ASC");
 
         try {
             return new Pagerfanta(new DoctrineORMAdapter($query));
@@ -125,12 +131,12 @@ class UserRepository extends EntityRepository
     {
 
         $query = $this->getEntityManager()
-            ->createQuery('
-                SELECT u, p FROM CCDNUserUserBundle:User u
+            ->createQuery("
+                SELECT u, p FROM {$this->getUserEntity()} u
                 INNER JOIN u.profile p
                 WHERE u.registeredDate > :date
                 GROUP BY u.id
-                ORDER BY u.username ASC')
+                ORDER BY u.username ASC")
             ->setParameter('date', new \DateTime('-7 days'));
         try {
             return new Pagerfanta(new DoctrineORMAdapter($query));
@@ -147,8 +153,8 @@ class UserRepository extends EntityRepository
     public function findTheseUsersByUsername($usernames)
     {
          $qb = $this->getEntityManager()->createQueryBuilder();
-        $query = $qb->add('select', 'u')
-            ->from('CCDNUserUserBundle:User', 'u')
+         $query = $qb->add('select', 'u')
+            ->from($this->getUserEntity(), 'u')
             ->where($qb->expr()->in('u.username', array_values($usernames)))
             ->getQuery();
 
